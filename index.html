@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect With Me | 3D Social Hub</title>
+  <meta name="description" content="View my social media links and connect with me. Scan the QR code to open this page.">
+  
+  <!-- Google Fonts: Space Grotesk & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for Social Media Brands -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Core 3D Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=1.2">
+</head>
+<body class="theme-glass-neon">
+  <!-- 3D Floating Decorative Shapes in Background -->
+  <div class="bg-decorations">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-3d"></div>
+  </div>
+
+  <div class="profile-container" id="profile-container">
+    <!-- Profile Card (3D Floating Glass) -->
+    <header class="profile-card js-tilt-card" id="profile-card">
+      <div class="avatar-container">
+        <img id="profile-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80" alt="Avatar" class="avatar-img">
+        <div class="avatar-glow"></div>
+      </div>
+      
+      <h1 class="profile-name" id="profile-name">Ahmed Khan</h1>
+      <p class="profile-bio" id="profile-bio">3D Designer & Full Stack Developer | Creating interactive web experiences.</p>
+    </header>
+
+    <!-- Social Links Stack (rendered dynamically with 3D hover effects) -->
+    <main class="links-stack" id="links-stack">
+      <!-- Dynamic links will be injected here -->
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading interactive 3D links...</p>
+      </div>
+    </main>
+    
+    <!-- Map Location Card (3D Floating Glass, hidden by default if not set) -->
+    <section class="profile-card js-tilt-card map-card-container" id="profile-map-card" style="display: none;">
+      <h2 class="map-card-title"><i class="fa-solid fa-location-dot"></i> Our Location</h2>
+      
+      <!-- Option A: Interactive Iframe Map (for Embed URLs) -->
+      <div class="map-iframe-wrapper" id="map-iframe-wrapper">
+        <iframe id="map-iframe" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      
+      <!-- Option B: Fallback Button for standard GMB share links -->
+      <div class="map-fallback-wrapper" id="map-fallback-wrapper" style="display: none;">
+        <div class="map-placeholder-icon">
+          <i class="fa-solid fa-map-location-dot"></i>
+        </div>
+        <p class="map-placeholder-text">View our location directly on Google Maps</p>
+        <a href="" target="_blank" id="map-fallback-btn" class="map-fallback-button">
+          <i class="fa-solid fa-square-arrow-up-right"></i> Open Google Maps
+        </a>
+      </div>
+    </section>
+    
+    <!-- Footer info -->
+    <footer class="profile-footer">
+      <p>Powered by <span class="brand-glow">3D QR Social Links</span></p>
+      <a href="admin.html" class="admin-link-btn">
+        <i class="fa-solid fa-gear"></i> Manage Links
+      </a>
+    </footer>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="3d-tilt.js?v=1.2"></script>
+  <script src="app.js?v=1.2"></script>
+</body>
+</html>

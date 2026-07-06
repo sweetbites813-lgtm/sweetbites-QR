@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | 3D Social Hub</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css?v=1.2">
+  <link rel="stylesheet" href="admin.css?v=1.2">
+  
+  <!-- Browser-side QR Code library (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body class="admin-body">
+  <!-- Status toast notifications -->
+  <!-- Status toast notifications -->
+  <div id="toast" class="toast">Changes saved successfully!</div>
+  <!-- Static Mode Banner (hidden by default) -->
+  <div id="static-banner" class="static-banner" style="display: none;">
+    <i class="fa-solid fa-cloud-arrow-down"></i>
+    <span><strong>Static Editor:</strong> Edits will download as <code>data.json</code>. Drag & drop it to GitHub to save!</span>
+  </div>
+
+  <div class="admin-wrapper">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="header-logo">
+        <div class="logo-box-3d">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <div>
+          <h1>3D QR Hub Dashboard</h1>
+          <p>Update links on the fly. The QR code stays the same!</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" target="_blank" class="preview-btn-top">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live Page
+        </a>
+      </div>
+    </header>
+
+    <div class="admin-grid">
+      <!-- CONFIGURATOR COLUMN -->
+      <section class="config-panel">
+        <!-- Section 1: Profile Details -->
+        <div class="admin-card">
+          <h2 class="card-title"><i class="fa-solid fa-user-gear"></i> Profile Customizer</h2>
+          
+          <div class="form-group">
+            <label for="input-name">Full Name</label>
+            <input type="text" id="input-name" placeholder="e.g. Ahmed Khan">
+          </div>
+          
+          <div class="form-group">
+            <label for="input-bio">Bio / Description</label>
+            <textarea id="input-bio" rows="3" placeholder="Tell people who you are..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Logo / Profile Picture</label>
+            <div class="logo-uploader-container" id="logo-uploader-container">
+              <input type="file" id="input-logo-file" accept="image/*" style="display: none;">
+              <div class="uploader-drag-area" id="uploader-drag-area">
+                <i class="fa-solid fa-cloud-arrow-up uploader-icon"></i>
+                <p class="uploader-text">Click or Drag & Drop image here</p>
+                <p class="uploader-subtext">PNG, JPG or SVG (Max 1MB)</p>
+              </div>
+              <div class="uploader-preview-area" id="uploader-preview-area" style="display: none;">
+                <img id="logo-thumbnail" src="" alt="Thumbnail" class="logo-thumb-img">
+                <div class="thumb-details">
+                  <span class="thumb-name" id="logo-file-name">logo.png</span>
+                  <button type="button" id="btn-remove-logo" class="btn-remove-logo"><i class="fa-solid fa-trash-can"></i> Remove</button>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 10px;">
+              <a href="#" id="toggle-avatar-url" style="font-size: 12px; color: #6366f1; text-decoration: none;"><i class="fa-solid fa-link"></i> Or use image URL instead</a>
+              <div id="avatar-url-wrapper" style="display: none; margin-top: 8px;">
+                <input type="text" id="input-avatar" placeholder="Paste image URL here (https://...)">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="input-map-embed">Google Maps Embed Code or Location Link (Optional)</label>
+            <input type="text" id="input-map-embed" placeholder="Paste Google Maps iframe code or URL here">
+          </div>
+        </div>
+
+        <!-- Section 2: Themes -->
+        <div class="admin-card">
+          <h2 class="card-title"><i class="fa-solid fa-palette"></i> 3D Lighting & Themes</h2>
+          <div class="theme-picker">
+            <button type="button" class="theme-option" data-theme="glass-neon">
+              <span class="theme-preview neon-gradient"></span>
+              <span class="theme-name">Glass Neon</span>
+            </button>
+            <button type="button" class="theme-option" data-theme="retro-cyber">
+              <span class="theme-preview cyber-gradient"></span>
+              <span class="theme-name">Retro Cyber</span>
+            </button>
+            <button type="button" class="theme-option" data-theme="aurora-glow">
+              <span class="theme-preview aurora-gradient"></span>
+              <span class="theme-name">Aurora Flow</span>
+            </button>
+            <button type="button" class="theme-option" data-theme="clay-3d">
+              <span class="theme-preview clay-gradient"></span>
+              <span class="theme-name">3D Clay</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 3: Links Manager -->
+        <div class="admin-card">
+          <div class="card-header-flex">
+            <h2 class="card-title"><i class="fa-solid fa-link"></i> Social Links Stack</h2>
+            <button id="add-link-btn" class="btn-secondary-3d"><i class="fa-solid fa-plus"></i> Add Link</button>
+          </div>
+
+          <div id="links-editor-list" class="links-editor-list">
+            <!-- Dynamic edit items injected here -->
+          </div>
+        </div>
+        
+        <!-- Save Floating Button -->
+        <div class="save-actions">
+          <button id="save-profile-btn" class="btn-primary-3d">
+            <i class="fa-solid fa-floppy-disk"></i> Save & Sync Changes
+          </button>
+        </div>
+      </section>
+
+      <!-- PREVIEW & QR COLUMN -->
+      <section class="preview-panel">
+        <!-- QR Code Card -->
+        <div class="admin-card qr-card-container">
+          <h2 class="card-title"><i class="fa-solid fa-qrcode"></i> Permanent QR Code</h2>
+          <p class="qr-desc">Scan this QR code with any phone on your Wi-Fi network to open your page live!</p>
+          
+          <div class="qr-display-area">
+            <div class="qr-wrapper-3d">
+              <img id="qr-image" src="" alt="QR Code Placeholder" class="qr-img">
+              <div class="qr-glow-shadow"></div>
+            </div>
+            
+            <div class="qr-actions">
+              <div class="qr-url-box">
+                <span class="qr-label">Live Link:</span>
+                <span id="qr-target-url" class="qr-url-text">Loading...</span>
+              </div>
+              
+              <div class="qr-buttons">
+                <button id="btn-copy-url" class="btn-small-3d"><i class="fa-solid fa-copy"></i> Copy Link</button>
+                <a id="btn-download-qr" href="#" class="btn-small-3d"><i class="fa-solid fa-download"></i> Download QR</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub Integration Card (for serverless online saves) -->
+        <div class="admin-card">
+          <h2 class="card-title"><i class="fa-brands fa-github"></i> GitHub Auto-Sync</h2>
+          <p class="qr-desc" style="margin-bottom: 12px;">Add your GitHub Token to save changes instantly from this dashboard without downloading files!</p>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label>GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx" style="padding: 8px 12px; font-size: 13px;">
+          </div>
+          <button type="button" id="btn-save-token" class="btn-secondary-3d" style="width: 100%; justify-content: center; padding: 10px 16px;">
+            <i class="fa-solid fa-key"></i> Link Token Securely
+          </button>
+        </div>
+
+        <!-- 3D Mobile Emulator Device -->
+        <div class="emulator-container">
+          <h2 class="card-title-center"><i class="fa-solid fa-mobile-screen-button"></i> 3D Isometric Live Preview</h2>
+          <div class="isometric-toggle-info">Move your mouse over the screen below to rotate it in 3D!</div>
+          
+          <div class="phone-wrapper-3d js-tilt-card" data-tilt-type="phone">
+            <div class="phone-screen">
+              <div class="phone-notch"></div>
+              
+               <!-- Screen Content (Loads Live Preview) -->
+               <iframe id="preview-iframe" src=""></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="3d-tilt.js?v=1.2"></script>
+  <script src="admin.js?v=1.2"></script>
+</body>
+</html>
