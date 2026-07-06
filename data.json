@@ -50,7 +50,7 @@
     {
       "id": "1783332791640",
       "platform": "website",
-      "title": "wabsite",
+      "title": "Website",
       "url": "https://",
       "clicks": 0,
       "active": true
@@ -63,5 +63,6 @@
       "clicks": 0,
       "active": true
     }
-  ]
+  ],
+  "repo_casing": "sweetbites-QR"
 }
