@@ -95,7 +95,20 @@ function renderPage(profile, links) {
     
     // Create Anchor Tag
     const card = document.createElement('a');
-    card.href = link.url;
+    
+    // Auto-message for WhatsApp
+    let finalUrl = link.url;
+    if (link.platform === 'whatsapp') {
+      if (!finalUrl.includes('text=')) {
+        const textMessage = encodeURIComponent("Hi Sweet Bites Arifwala, I scanned your QR code and would like to inquire about your cakes!");
+        if (finalUrl.includes('?')) {
+          finalUrl += `&text=${textMessage}`;
+        } else {
+          finalUrl += `?text=${textMessage}`;
+        }
+      }
+    }
+    card.href = finalUrl;
     card.target = '_blank';
     card.className = `link-card-3d ${brandClass}`;
     
@@ -168,6 +181,11 @@ function renderPage(profile, links) {
   if (profileCard) {
     new Card3DTilt(profileCard, { maxTilt: 8, scale: 1.01 });
   }
+
+  // Trigger falling sweets background if not in preview mode and not already created
+  if (!isPreview && !document.querySelector('.falling-sweets-container')) {
+    initFallingSweets(profile.theme);
+  }
 }
 
 // Check if loaded in Iframe/Preview Mode
@@ -190,4 +208,65 @@ if (isPreview) {
 } else {
   // Normal load
   document.addEventListener('DOMContentLoaded', loadProfile);
+}
+
+// Falling Sweets Background Effect
+function initFallingSweets(theme) {
+  const sweetIcons = [
+    'fa-cookie',
+    'fa-cake-candles',
+    'fa-ice-cream',
+    'fa-cookie-bite',
+    'fa-candy-cane'
+  ];
+  
+  const container = document.createElement('div');
+  container.className = 'falling-sweets-container';
+  container.style.position = 'fixed';
+  container.style.top = '0';
+  container.style.left = '0';
+  container.style.width = '100%';
+  container.style.height = '100%';
+  container.style.overflow = 'hidden';
+  container.style.pointerEvents = 'none';
+  container.style.zIndex = '0';
+  document.body.appendChild(container);
+
+  // Determine particle color based on theme
+  let particleColor = 'rgba(255, 255, 255, 0.08)';
+  if (theme === 'clay-3d') {
+    particleColor = 'rgba(99, 102, 241, 0.07)';
+  } else if (theme === 'glass-neon') {
+    particleColor = 'rgba(217, 70, 239, 0.09)';
+  } else if (theme === 'retro-cyber') {
+    particleColor = 'rgba(0, 240, 255, 0.08)';
+  } else if (theme === 'aurora-glow') {
+    particleColor = 'rgba(212, 175, 55, 0.08)';
+  }
+
+  const maxSweets = 12;
+  for (let i = 0; i < maxSweets; i++) {
+    createSweet(container, sweetIcons, particleColor);
+  }
+}
+
+function createSweet(container, icons, color) {
+  const sweet = document.createElement('div');
+  sweet.className = 'falling-sweet';
+  
+  const icon = icons[Math.floor(Math.random() * icons.length)];
+  sweet.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+  
+  const startLeft = Math.random() * 100;
+  const delay = Math.random() * -20;
+  const duration = 12 + Math.random() * 12;
+  const size = 16 + Math.random() * 16;
+  
+  sweet.style.left = `${startLeft}%`;
+  sweet.style.fontSize = `${size}px`;
+  sweet.style.color = color;
+  sweet.style.animationDelay = `${delay}s`;
+  sweet.style.animationDuration = `${duration}s`;
+  
+  container.appendChild(sweet);
 }

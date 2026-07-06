@@ -716,3 +716,29 @@ body {
 .theme-aurora-glow .map-fallback-button:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 0 10px rgba(212, 175, 55, 0.3);
 }
+
+/* Falling Sweets Background Effect */
+.falling-sweet {
+  position: absolute;
+  top: -50px;
+  pointer-events: none;
+  z-index: 0;
+  animation: fallAnimation linear infinite;
+  display: block;
+}
+@keyframes fallAnimation {
+  0% {
+    transform: translateY(-50px) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(360deg) translateX(80px);
+    opacity: 0;
+  }
+}
