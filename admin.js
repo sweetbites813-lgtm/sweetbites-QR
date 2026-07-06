@@ -121,6 +121,24 @@ async function initAdmin() {
         const staticBanner = document.getElementById('static-banner');
         if (staticBanner) staticBanner.style.display = 'flex';
         
+        // Dynamically resolve repository casing from API
+        const owner = window.location.hostname.split('.')[0];
+        const repo = window.location.pathname.split('/')[1] || 'my-QR';
+        if (owner && owner !== 'localhost' && owner !== '127') {
+          try {
+            const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+            if (repoRes.ok) {
+              const repoData = await repoRes.json();
+              if (repoData.name) {
+                state.repo_casing = repoData.name;
+                console.log(`Resolved repo casing: ${state.repo_casing}`);
+              }
+            }
+          } catch (repoErr) {
+            console.warn('Could not resolve repo casing:', repoErr);
+          }
+        }
+        
         console.log("Admin Dashboard running in Static Mode.");
       } else {
         throw new Error('Could not fetch profile details');
@@ -382,6 +400,7 @@ saveProfileBtn.addEventListener('click', async () => {
   saveProfileBtn.style.boxShadow = '0 2px 0 #4f46e5';
   
   try {
+    // Try posting to local server backend
     const response = await fetch('/api/profile', {
       method: 'POST',
       headers: {
@@ -390,36 +409,74 @@ saveProfileBtn.addEventListener('click', async () => {
       body: JSON.stringify(state)
     });
     
-    if (!response.ok) throw new Error('API save error');
-    
-    const result = await response.json();
-    showToast('Changes saved & synced live!');
-    
-  } catch (error) {
-    console.warn('Backend server not detected or save failed. Triggering file download fallback...');
-    
-    // Trigger direct configuration download (data.json) as a fallback
-    try {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "data.json");
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      
-      showToast('Config file data.json downloaded! Upload it to GitHub.');
-    } catch (downloadErr) {
-      console.error('Failed to trigger download:', downloadErr);
-      showToast('Failed to save changes. Try again.', true);
+    if (response.ok) {
+      showToast('Changes saved & synced live!');
+      setTimeout(() => {
+        saveProfileBtn.style.transform = '';
+        saveProfileBtn.style.boxShadow = '';
+      }, 100);
+      return;
     }
-  } finally {
-    // Reset tactile styles
-    setTimeout(() => {
-      saveProfileBtn.style.transform = '';
-      saveProfileBtn.style.boxShadow = '';
-    }, 100);
+  } catch (e) {
+    console.log('Local backend not detected, trying GitHub API save...');
   }
+  
+  // Try GitHub API save if token is saved in localStorage
+  const token = localStorage.getItem('github_token');
+  const owner = window.location.hostname.split('.')[0];
+  const repo = state.repo_casing || window.location.pathname.split('/')[1] || 'my-QR';
+  
+  if (token && owner && owner !== 'localhost' && owner !== '127') {
+    try {
+      showToast('Saving directly to GitHub...');
+      const fileUrl = `https://api.github.com/repos/${owner}/${repo}/contents/data.json`;
+      
+      // Get the current file SHA
+      const getRes = await fetch(fileUrl, {
+        headers: { 'Authorization': `token ${token}` }
+      });
+      
+      if (!getRes.ok) {
+        throw new Error(`API Status ${getRes.status} (${getRes.statusText || 'Unauthorized/Not Found'})`);
+      }
+      
+      const fileData = await getRes.json();
+      const sha = fileData.sha;
+      
+      // Update the file
+      const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(state, null, 2))));
+      const putRes = await fetch(fileUrl, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Update profile config from admin dashboard',
+          content: updatedContent,
+          sha: sha
+        })
+      });
+      
+      if (!putRes.ok) {
+        throw new Error(`API Write Status ${putRes.status}`);
+      }
+      
+      showToast('Changes committed directly to GitHub! Live in 15s.');
+      
+    } catch (gitErr) {
+      console.error(gitErr);
+      showToast(`Sync Failed: ${gitErr.message}. Downloading data.json...`, true);
+      setTimeout(downloadConfigFallback, 3000);
+    }
+  } else {
+    downloadConfigFallback();
+  }
+  
+  setTimeout(() => {
+    saveProfileBtn.style.transform = '';
+    saveProfileBtn.style.boxShadow = '';
+  }, 100);
 });
 
 // Copy URL Button Handler
