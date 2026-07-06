@@ -725,7 +725,8 @@ body {
   z-index: 0;
   animation: fallAnimation linear infinite;
   display: block;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  opacity: 0.35; /* Perfect translucent colorful emojis! */
 }
 @keyframes fallAnimation {
   0% {

@@ -212,13 +212,8 @@ if (isPreview) {
 
 // Falling Sweets Background Effect
 function initFallingSweets(theme) {
-  const sweetIcons = [
-    'fa-cookie',
-    'fa-cake-candles',
-    'fa-ice-cream',
-    'fa-cookie-bite',
-    'fa-candy-cane'
-  ];
+  // Real colorful sweets emojis: cake (🍰, 🎂), cupcake (🧁), donut (🍩), cookies (🍪), brownie/chocolate (🍫)
+  const sweetEmojis = ['🍰', '🧁', '🎂', '🍩', '🍪', '🍫'];
   
   const container = document.createElement('div');
   container.className = 'falling-sweets-container';
@@ -232,39 +227,26 @@ function initFallingSweets(theme) {
   container.style.zIndex = '0';
   document.body.appendChild(container);
 
-  // Determine particle color based on theme
-  let particleColor = 'rgba(255, 255, 255, 0.35)';
-  if (theme === 'clay-3d') {
-    particleColor = 'rgba(99, 102, 241, 0.3)';
-  } else if (theme === 'glass-neon') {
-    particleColor = 'rgba(217, 70, 239, 0.28)';
-  } else if (theme === 'retro-cyber') {
-    particleColor = 'rgba(0, 240, 255, 0.32)';
-  } else if (theme === 'aurora-glow') {
-    particleColor = 'rgba(212, 175, 55, 0.35)';
-  }
-
   const maxSweets = 12;
   for (let i = 0; i < maxSweets; i++) {
-    createSweet(container, sweetIcons, particleColor);
+    createSweet(container, sweetEmojis);
   }
 }
 
-function createSweet(container, icons, color) {
+function createSweet(container, emojis) {
   const sweet = document.createElement('div');
   sweet.className = 'falling-sweet';
   
-  const icon = icons[Math.floor(Math.random() * icons.length)];
-  sweet.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+  const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+  sweet.textContent = emoji;
   
   const startLeft = Math.random() * 100;
   const delay = Math.random() * -20;
-  const duration = 12 + Math.random() * 12;
-  const size = 16 + Math.random() * 16;
+  const duration = 14 + Math.random() * 12;
+  const size = 20 + Math.random() * 24; // slightly larger for emojis
   
   sweet.style.left = `${startLeft}%`;
   sweet.style.fontSize = `${size}px`;
-  sweet.style.color = color;
   sweet.style.animationDelay = `${delay}s`;
   sweet.style.animationDuration = `${duration}s`;
   
