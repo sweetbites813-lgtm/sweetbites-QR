@@ -422,7 +422,8 @@ saveProfileBtn.addEventListener('click', async () => {
   }
   
   // Try GitHub API save if token is saved in localStorage
-  const token = localStorage.getItem('github_token');
+  let token = localStorage.getItem('github_token');
+  if (token) token = token.trim();
   const owner = window.location.hostname.split('.')[0];
   const repo = state.repo_casing || window.location.pathname.split('/')[1] || 'my-QR';
   
