@@ -39,7 +39,7 @@ const brandClassMappings = {
 // Fetch current profile and render
 async function loadProfile() {
   try {
-    const response = await fetch('./data.json');
+    const response = await fetch(`./data.json?v=${Date.now()}`);
     if (!response.ok) throw new Error('Network error fetching profile data');
     const data = await response.json();
     renderPage(data.profile, data.links);
