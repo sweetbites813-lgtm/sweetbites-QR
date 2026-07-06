@@ -64,6 +64,9 @@ function renderPage(profile, links) {
   profileBio.textContent = profile.bio || 'Digital Creator';
   
   // Custom Avatar or Default Placeholder
+  avatarImg.onload = () => {
+    avatarImg.style.opacity = '1';
+  };
   if (profile.avatar && profile.avatar.trim() !== '') {
     avatarImg.src = profile.avatar;
   } else {
