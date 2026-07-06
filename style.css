@@ -725,6 +725,7 @@ body {
   z-index: 0;
   animation: fallAnimation linear infinite;
   display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 @keyframes fallAnimation {
   0% {

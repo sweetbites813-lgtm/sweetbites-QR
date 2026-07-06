@@ -233,15 +233,15 @@ function initFallingSweets(theme) {
   document.body.appendChild(container);
 
   // Determine particle color based on theme
-  let particleColor = 'rgba(255, 255, 255, 0.08)';
+  let particleColor = 'rgba(255, 255, 255, 0.35)';
   if (theme === 'clay-3d') {
-    particleColor = 'rgba(99, 102, 241, 0.07)';
+    particleColor = 'rgba(99, 102, 241, 0.3)';
   } else if (theme === 'glass-neon') {
-    particleColor = 'rgba(217, 70, 239, 0.09)';
+    particleColor = 'rgba(217, 70, 239, 0.28)';
   } else if (theme === 'retro-cyber') {
-    particleColor = 'rgba(0, 240, 255, 0.08)';
+    particleColor = 'rgba(0, 240, 255, 0.32)';
   } else if (theme === 'aurora-glow') {
-    particleColor = 'rgba(212, 175, 55, 0.08)';
+    particleColor = 'rgba(212, 175, 55, 0.35)';
   }
 
   const maxSweets = 12;
