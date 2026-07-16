@@ -46,6 +46,10 @@
       
       <h1 class="profile-name" id="profile-name">&nbsp;</h1>
       <p class="profile-bio" id="profile-bio">&nbsp;</p>
+      <!-- Save Contact Button -->
+      <button id="save-contact-btn" class="save-contact-btn-3d">
+        <i class="fa-solid fa-user-plus"></i> Save Contact
+      </button>
     </header>
 
     <!-- Social Links Stack (rendered dynamically with 3D hover effects) -->
@@ -81,9 +85,14 @@
     <!-- Footer info -->
     <footer class="profile-footer">
       <p>Powered by <span class="brand-glow">Sweetbites Arifwala</span></p>
-      <a href="admin.html" class="admin-link-btn">
-        <i class="fa-solid fa-gear"></i> Manage Links
-      </a>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="admin.html" class="admin-link-btn">
+          <i class="fa-solid fa-gear"></i> Manage Links
+        </a>
+        <button id="sound-mute-toggle" class="sound-mute-btn" aria-label="Toggle Sound">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
     </footer>
   </div>
 

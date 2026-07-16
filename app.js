@@ -43,6 +43,9 @@ async function loadProfile() {
     if (!response.ok) throw new Error('Network error fetching profile data');
     const data = await response.json();
     renderPage(data.profile, data.links);
+    
+    // Trigger confetti celebration on successful load
+    setTimeout(triggerConfetti, 400);
   } catch (error) {
     console.error('Failed to load profile:', error);
     linksStack.innerHTML = `
@@ -114,6 +117,8 @@ function renderPage(profile, links) {
     
     // Add Click API hook
     card.addEventListener('click', (e) => {
+      // Play click sound
+      playAudioClick();
       // Register click without blocking navigation
       fetch(`/api/click/${link.id}`, { method: 'POST' }).catch(() => {});
     });
@@ -192,6 +197,12 @@ function renderPage(profile, links) {
 
   // Setup share profile button
   setupShareButton(profile.name);
+
+  // Setup save contact button
+  setupSaveContactButton(profile);
+
+  // Setup sound settings button
+  setupSoundMuteButton();
 }
 
 // Check if loaded in Iframe/Preview Mode
@@ -283,6 +294,8 @@ function setupThemeToggle(profileTheme) {
   toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
 
   newToggleBtn.addEventListener('click', () => {
+    // Play switch sound
+    playAudioSwitch();
     // Depress animation effect
     newToggleBtn.style.transform = 'scale(0.9)';
     setTimeout(() => { newToggleBtn.style.transform = ''; }, 100);
@@ -379,4 +392,213 @@ function showPublicToast(message) {
   setTimeout(() => {
     toastEl.style.opacity = '0';
   }, 2500);
+}
+
+// Audio POP synthesis using Web Audio API (zero external assets needed)
+let audioCtx = null;
+function playAudioClick() {
+  try {
+    if (localStorage.getItem('sound_muted') === 'true') return;
+    
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    // Resume context if suspended (browser security autoplays policy)
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    // Frequency sweeps down for organic pop sound
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+    
+    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+  } catch (e) {
+    console.warn('Audio synthesis failed:', e);
+  }
+}
+
+// Audio SWITCH synthesis using Web Audio API (sweeps up)
+function playAudioSwitch() {
+  try {
+    if (localStorage.getItem('sound_muted') === 'true') return;
+    
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.12);
+    
+    gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  } catch (e) {
+    console.warn('Audio synthesis failed:', e);
+  }
+}
+
+// Sound settings button listener
+function setupSoundMuteButton() {
+  const muteBtn = document.getElementById('sound-mute-toggle');
+  if (!muteBtn) return;
+
+  // Remove existing listener to prevent duplicates
+  const newMuteBtn = muteBtn.cloneNode(true);
+  muteBtn.parentNode.replaceChild(newMuteBtn, muteBtn);
+
+  const updateIcon = () => {
+    const isMuted = localStorage.getItem('sound_muted') === 'true';
+    const icon = newMuteBtn.querySelector('i');
+    if (icon) {
+      icon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    }
+  };
+
+  updateIcon();
+
+  newMuteBtn.addEventListener('click', () => {
+    const isMuted = localStorage.getItem('sound_muted') === 'true';
+    localStorage.setItem('sound_muted', !isMuted ? 'true' : 'false');
+    updateIcon();
+    if (isMuted) {
+      // Play pop to verify it's unmuted
+      playAudioClick();
+    }
+  });
+}
+
+// Save Contact Button (.vcf download generator)
+function setupSaveContactButton(profile) {
+  const saveBtn = document.getElementById('save-contact-btn');
+  if (!saveBtn) return;
+
+  // Remove existing listener to prevent duplicates
+  const newSaveBtn = saveBtn.cloneNode(true);
+  saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+
+  newSaveBtn.addEventListener('click', () => {
+    playAudioClick();
+
+    const name = profile.name || 'Sweetbites Arifwala';
+    const note = profile.bio || 'Home Baker';
+    const url = window.location.href.split('?')[0];
+    const phone = '923217337801'; // Default WhatsApp phone number
+
+    // Structured vCard string content
+    const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:Arifwala;Sweetbites;;;
+FN:${name}
+ORG:${name}
+TITLE:Home Baker
+TEL;TYPE=CELL;TYPE=PREF:+${phone}
+URL:${url}
+NOTE:${note}
+END:VCARD`;
+
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8;' });
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = `${name.replace(/\s+/g, '_')}.vcf`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  });
+}
+
+// Canvas Confetti Celebration Shower
+function triggerConfetti() {
+  // Never fire confetti inside preview frames
+  if (window.location.search.includes('preview=true')) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100vw';
+  canvas.style.height = '100vh';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '999';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const colors = ['#f43f5e', '#fbbf24', '#3b82f6', '#10b981', '#a855f7', '#ec4899'];
+  const confettiCount = 100;
+  const confetti = [];
+
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push({
+      x: Math.random() * width,
+      y: Math.random() * -height - 20,
+      size: 6 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speedX: -2 + Math.random() * 4,
+      speedY: 4 + Math.random() * 5,
+      rotation: Math.random() * 360,
+      rotationSpeed: -5 + Math.random() * 10
+    });
+  }
+
+  const startTime = Date.now();
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    let active = false;
+    confetti.forEach(p => {
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotationSpeed;
+
+      if (p.y < height) {
+        active = true;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      }
+    });
+
+    if (active && Date.now() - startTime < 3500) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.remove();
+    }
+  }
+
+  animate();
 }

@@ -810,3 +810,71 @@ body {
   transform: scale(1.1) translateY(-2px);
   box-shadow: 3px 3px 6px #cbd5e1, -3px -3px 6px #ffffff, inset 2px 2px 4px rgba(0, 0, 0, 0.05);
 }
+
+/* Save Contact Button */
+.save-contact-btn-3d {
+  background: linear-gradient(135deg, #10b981, #059669); /* Beautiful emerald green gradient */
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 24px;
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 0 #047857, 0 6px 12px rgba(16, 185, 129, 0.2);
+  margin-top: 16px;
+  transition: all 0.1s ease;
+  transform: translateY(0);
+  transform-style: preserve-3d;
+  transform: translateZ(20px);
+}
+.save-contact-btn-3d:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(1px) translateZ(25px);
+  box-shadow: 0 3px 0 #047857, 0 4px 8px rgba(16, 185, 129, 0.25);
+}
+.save-contact-btn-3d:active {
+  transform: translateY(4px) translateZ(10px);
+  box-shadow: 0 0px 0 #047857;
+}
+
+/* Light Mode claymorphism override for Save Contact Button */
+.theme-clay-3d .save-contact-btn-3d {
+  background: #e2e8f0;
+  color: #059669;
+  box-shadow: 4px 4px 8px #cbd5e1, -4px -4px 8px #ffffff, inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(0, 0, 0, 0.05);
+}
+.theme-clay-3d .save-contact-btn-3d:hover {
+  box-shadow: 2px 2px 4px #cbd5e1, -2px -2px 4px #ffffff, inset 2px 2px 4px rgba(0,0,0,0.05), inset -2px -2px 4px rgba(255,255,255,0.8);
+  transform: translateY(2px) !important;
+}
+
+/* Sound Mute Button Style */
+.sound-mute-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 15px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.6;
+  transition: all 0.3s;
+}
+.sound-mute-btn:hover {
+  opacity: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+.theme-clay-3d .sound-mute-btn:hover {
+  color: #1e293b;
+  background: rgba(0, 0, 0, 0.05);
+}
