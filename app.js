@@ -84,7 +84,8 @@ function renderPage(profile, links) {
   // Add Save Contact button card
   if (!isPreview) {
     const contactCard = document.createElement('a');
-    contactCard.href = '#';
+    contactCard.href = './contact.vcf';
+    contactCard.setAttribute('download', 'Sweetbites_Arifwala.vcf');
     contactCard.className = 'link-card-3d brand-custom';
     contactCard.style.setProperty('--platform-color', '#10b981');
     contactCard.style.setProperty('--platform-color-rgb', '16, 185, 129');
@@ -99,10 +100,8 @@ function renderPage(profile, links) {
       </div>
     `;
     
-    contactCard.addEventListener('click', (e) => {
-      e.preventDefault();
+    contactCard.addEventListener('click', () => {
       playAudioClick();
-      downloadVCard(profile);
     });
     
     linksStack.appendChild(contactCard);
@@ -517,32 +516,6 @@ function setupSoundMuteButton() {
   });
 }
 
-// Save Contact (.vcf download generator)
-function downloadVCard(profile) {
-  const name = profile.name || 'Sweetbites Arifwala';
-  const note = profile.bio || 'Home Baker';
-  const url = window.location.href.split('?')[0];
-  const phone = '923217337801'; // Default WhatsApp phone number
-
-  // Structured vCard string content
-  const vcard = `BEGIN:VCARD
-VERSION:3.0
-N:Arifwala;Sweetbites;;;
-FN:${name}
-ORG:${name}
-TITLE:Home Baker
-TEL;TYPE=CELL;TYPE=PREF:+${phone}
-URL:${url}
-NOTE:${note}
-END:VCARD`;
-
-  const downloadLink = document.createElement('a');
-  downloadLink.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
-  downloadLink.download = `${name.replace(/\s+/g, '_')}.vcf`;
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-}
 
 // Canvas Confetti Celebration Shower
 function triggerConfetti() {
