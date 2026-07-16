@@ -186,6 +186,9 @@ function renderPage(profile, links) {
   if (!isPreview && !document.querySelector('.falling-sweets-container')) {
     initFallingSweets(profile.theme);
   }
+
+  // Setup theme toggle (Dark / Light mode)
+  setupThemeToggle(profile.theme);
 }
 
 // Check if loaded in Iframe/Preview Mode
@@ -251,4 +254,55 @@ function createSweet(container, emojis) {
   sweet.style.animationDuration = `${duration}s`;
   
   container.appendChild(sweet);
+}
+
+// Setup Theme Toggle Button (Dark/Light mode)
+function setupThemeToggle(profileTheme) {
+  const toggleBtn = document.getElementById('dark-light-toggle');
+  if (!toggleBtn) return;
+
+  const updateToggleIcon = (currentTheme) => {
+    const icon = toggleBtn.querySelector('i');
+    if (!icon) return;
+    if (currentTheme === 'clay-3d') {
+      icon.className = 'fa-solid fa-moon'; // Moon icon when in Light mode
+    } else {
+      icon.className = 'fa-solid fa-sun'; // Sun icon when in Dark mode
+    }
+  };
+
+  // Determine current active theme
+  let currentTheme = document.body.className.replace('theme-', '');
+  updateToggleIcon(currentTheme);
+
+  // Remove existing listener to prevent duplicates
+  const newToggleBtn = toggleBtn.cloneNode(true);
+  toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
+
+  newToggleBtn.addEventListener('click', () => {
+    // Depress animation effect
+    newToggleBtn.style.transform = 'scale(0.9)';
+    setTimeout(() => { newToggleBtn.style.transform = ''; }, 100);
+
+    const isLight = document.body.classList.contains('theme-clay-3d');
+    let newTheme;
+    if (isLight) {
+      // Switch back to original configured dark theme (or default glass-neon if none)
+      newTheme = profileTheme && profileTheme !== 'clay-3d' ? profileTheme : 'glass-neon';
+    } else {
+      // Switch to light theme
+      newTheme = 'clay-3d';
+    }
+
+    // Apply new theme class to body
+    document.body.className = `theme-${newTheme}`;
+    updateToggleIcon(newTheme);
+
+    // Re-initialize sweets background particle colors to match new theme!
+    const sweetsContainer = document.querySelector('.falling-sweets-container');
+    if (sweetsContainer) {
+      sweetsContainer.remove();
+      initFallingSweets(newTheme);
+    }
+  });
 }

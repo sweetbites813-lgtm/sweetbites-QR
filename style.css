@@ -744,3 +744,56 @@ body {
     opacity: 0;
   }
 }
+
+/* Theme Toggle Button Styles */
+.theme-toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Theme Toggle Button Styles for Dark Modes */
+.theme-glass-neon .theme-toggle-btn,
+.theme-retro-cyber .theme-toggle-btn,
+.theme-aurora-glow .theme-toggle-btn {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fbbf24; /* Warm yellow sun color */
+}
+.theme-glass-neon .theme-toggle-btn:hover,
+.theme-retro-cyber .theme-toggle-btn:hover,
+.theme-aurora-glow .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.25);
+}
+
+/* Theme Toggle Button Styles for Light Modes */
+.theme-clay-3d .theme-toggle-btn {
+  background: #e2e8f0;
+  color: #475569; /* Soft dark moon color */
+  box-shadow: 6px 6px 12px #cbd5e1, -6px -6px 12px #ffffff;
+}
+.theme-clay-3d .theme-toggle-btn:hover {
+  transform: scale(1.1) rotate(-15deg);
+  box-shadow: 3px 3px 6px #cbd5e1, -3px -3px 6px #ffffff, inset 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Hide theme toggle button inside preview frames */
+.in-preview-mode #dark-light-toggle {
+  display: none !important;
+}
