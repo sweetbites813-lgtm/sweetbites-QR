@@ -156,11 +156,6 @@ body {
     inset 2px 2px 4px rgba(255, 255, 255, 0.25),
     inset -2px -2px 4px rgba(0, 0, 0, 0.45);
 }
-.theme-glass-neon .avatar-glow {
-  background: conic-gradient(#6366f1, #ec4899, #06b6d4, #6366f1);
-  animation: rotateGlow 6s linear infinite;
-  filter: blur(10px);
-}
 
 /* Theme 2: 3D Cyber Metal (Industrial Neon Panel) */
 .theme-retro-cyber {
@@ -210,15 +205,6 @@ body {
     0 0 16px var(--platform-color, #00f0ff),
     inset 1px 1px 1px rgba(255, 255, 255, 0.15);
   transform: translateY(4px) !important; /* Visual mechanical depress */
-}
-.theme-retro-cyber .avatar-img {
-  border: 3px solid #00f0ff;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-}
-.theme-retro-cyber .avatar-glow {
-  background: #f400ff;
-  filter: blur(15px);
-  opacity: 0.3;
 }
 .theme-retro-cyber .profile-name {
   font-family: var(--font-title);
@@ -275,14 +261,6 @@ body {
     inset 2px 2px 4px rgba(255, 255, 255, 0.08),
     inset -2px -2px 4px rgba(0, 0, 0, 0.55);
 }
-.theme-aurora-glow .avatar-glow {
-  background: conic-gradient(#d4af37, #f3e5ab, #aa771c, #d4af37);
-  animation: rotateGlow 6s linear infinite;
-  filter: blur(8px);
-}
-.theme-aurora-glow .avatar-img {
-  border: 3px solid #d4af37;
-}
 .theme-aurora-glow .admin-link-btn {
   color: #a8a29e;
   border-color: rgba(212, 175, 55, 0.2);
@@ -334,13 +312,6 @@ body {
               inset -3px -3px 6px rgba(255, 255, 255, 0.8);
   transform: translateY(2px) !important; /* overrides tilt slightly but feels squishy and tactile */
 }
-.theme-clay-3d .avatar-img {
-  border: 4px solid #f1f5f9;
-}
-.theme-clay-3d .avatar-glow {
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.08);
-  background: transparent;
-}
 .theme-clay-3d .admin-link-btn {
   color: #475569;
   border-color: #cbd5e1;
@@ -378,19 +349,12 @@ body {
   object-fit: cover;
   position: relative;
   z-index: 2;
-  border: 3px solid rgba(255, 255, 255, 0.2);
+  border: 4px solid #ffffff; /* Clean, premium white border */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Beautiful soft drop shadow */
 }
 
 .avatar-glow {
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border-radius: 50%;
-  z-index: 1;
-  filter: blur(8px);
-  opacity: 0.8;
+  display: none; /* Hide spinning neon gradients for clean look */
 }
 
 @keyframes rotateGlow {
