@@ -33,32 +33,32 @@
     },
     {
       "id": "5",
-      "platform": "google-maps",
-      "title": "Google map",
-      "url": "https://maps.app.goo.gl/LNcDE86B2qJsYXNP9",
+      "platform": "tiktok",
+      "title": "TikTok",
+      "url": "https://www.tiktok.com/@sweetbitesarifwala?_r=1&_t=ZS-984c8QtwRU2",
       "clicks": 2,
       "active": true
     },
     {
       "id": "1783332765400",
       "platform": "facebook",
-      "title": "facebook profile Humaira irfan",
-      "url": "https://www.facebook.com/share/1BaDZs7Lps/",
+      "title": "FB page sweetbites Arifwala",
+      "url": "https://www.facebook.com/share/18uBoeR6QQ/",
       "clicks": 0,
       "active": true
     },
     {
       "id": "1783332791640",
-      "platform": "website",
-      "title": "Website",
-      "url": "https://www.sweetbites.pk",
+      "platform": "facebook",
+      "title": "FB profile Humira irfan",
+      "url": "https://www.facebook.com/share/1BaDZs7Lps/",
       "clicks": 0,
       "active": true
     },
     {
       "id": "1784180812396",
       "platform": "tiktok",
-      "title": "Tiktok",
+      "title": "TikTok",
       "url": "https://www.tiktok.com/@sweetbitesarifwala?_r=1&_t=ZS-984c8QtwRU2",
       "clicks": 0,
       "active": true
