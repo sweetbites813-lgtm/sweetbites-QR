@@ -189,6 +189,9 @@ function renderPage(profile, links) {
 
   // Setup theme toggle (Dark / Light mode)
   setupThemeToggle(profile.theme);
+
+  // Setup share profile button
+  setupShareButton(profile.name);
 }
 
 // Check if loaded in Iframe/Preview Mode
@@ -305,4 +308,75 @@ function setupThemeToggle(profileTheme) {
       initFallingSweets(newTheme);
     }
   });
+}
+
+// Setup Share Button
+function setupShareButton(profileName) {
+  const shareBtn = document.getElementById('share-profile-btn');
+  if (!shareBtn) return;
+
+  // Remove existing listener to prevent duplicates
+  const newShareBtn = shareBtn.cloneNode(true);
+  shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
+
+  newShareBtn.addEventListener('click', async () => {
+    // Depress animation effect
+    newShareBtn.style.transform = 'scale(0.9)';
+    setTimeout(() => { newShareBtn.style.transform = ''; }, 100);
+
+    const shareData = {
+      title: profileName || 'Sweetbites Arifwala',
+      text: `Check out ${profileName || 'Sweetbites Arifwala'} QR Profile! Connect via WhatsApp, Instagram, Facebook & more!`,
+      url: window.location.href.split('?')[0] // current url without query params
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        console.log('Shared successfully!');
+      } catch (err) {
+        console.log('Share canceled or failed:', err);
+      }
+    } else {
+      // Fallback: Copy URL to clipboard
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        showPublicToast('Link copied to clipboard! Share it anywhere.');
+      } catch (copyErr) {
+        console.error('Failed to copy link:', copyErr);
+      }
+    }
+  });
+}
+
+// Custom Toast for Public View (if not defined)
+function showPublicToast(message) {
+  let toastEl = document.getElementById('public-toast');
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.id = 'public-toast';
+    toastEl.style.position = 'fixed';
+    toastEl.style.bottom = '30px';
+    toastEl.style.left = '50%';
+    toastEl.style.transform = 'translateX(-50%)';
+    toastEl.style.background = 'rgba(15, 23, 42, 0.95)';
+    toastEl.style.color = '#fff';
+    toastEl.style.padding = '12px 24px';
+    toastEl.style.borderRadius = '24px';
+    toastEl.style.fontSize = '13px';
+    toastEl.style.fontWeight = '600';
+    toastEl.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.4)';
+    toastEl.style.zIndex = '1000';
+    toastEl.style.transition = 'opacity 0.3s ease';
+    toastEl.style.pointerEvents = 'none';
+    toastEl.style.opacity = '0';
+    toastEl.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+    document.body.appendChild(toastEl);
+  }
+  
+  toastEl.textContent = message;
+  toastEl.style.opacity = '1';
+  setTimeout(() => {
+    toastEl.style.opacity = '0';
+  }, 2500);
 }
