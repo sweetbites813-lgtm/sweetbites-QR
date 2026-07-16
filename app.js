@@ -80,6 +80,34 @@ function renderPage(profile, links) {
   
   // 3. Set Links Stack
   linksStack.innerHTML = '';
+
+  // Add Save Contact button card
+  if (!isPreview) {
+    const contactCard = document.createElement('a');
+    contactCard.href = '#';
+    contactCard.className = 'link-card-3d brand-custom';
+    contactCard.style.setProperty('--platform-color', '#10b981');
+    contactCard.style.setProperty('--platform-color-rgb', '16, 185, 129');
+    
+    contactCard.innerHTML = `
+      <div class="link-icon-container">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <span class="link-title" style="font-weight: 700;">Save Contact to Phone</span>
+      <div class="link-arrow">
+        <i class="fa-solid fa-download"></i>
+      </div>
+    `;
+    
+    contactCard.addEventListener('click', (e) => {
+      e.preventDefault();
+      playAudioClick();
+      downloadVCard(profile);
+    });
+    
+    linksStack.appendChild(contactCard);
+    new Card3DTilt(contactCard, { maxTilt: 15, scale: 1.03 });
+  }
   
   const activeLinks = links.filter(link => link.active && link.url && link.title);
   
@@ -197,9 +225,6 @@ function renderPage(profile, links) {
 
   // Setup share profile button
   setupShareButton(profile.name);
-
-  // Setup save contact button
-  setupSaveContactButton(profile);
 
   // Setup sound settings button
   setupSoundMuteButton();
@@ -492,25 +517,15 @@ function setupSoundMuteButton() {
   });
 }
 
-// Save Contact Button (.vcf download generator)
-function setupSaveContactButton(profile) {
-  const saveBtn = document.getElementById('save-contact-btn');
-  if (!saveBtn) return;
+// Save Contact (.vcf download generator)
+function downloadVCard(profile) {
+  const name = profile.name || 'Sweetbites Arifwala';
+  const note = profile.bio || 'Home Baker';
+  const url = window.location.href.split('?')[0];
+  const phone = '923217337801'; // Default WhatsApp phone number
 
-  // Remove existing listener to prevent duplicates
-  const newSaveBtn = saveBtn.cloneNode(true);
-  saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
-
-  newSaveBtn.addEventListener('click', () => {
-    playAudioClick();
-
-    const name = profile.name || 'Sweetbites Arifwala';
-    const note = profile.bio || 'Home Baker';
-    const url = window.location.href.split('?')[0];
-    const phone = '923217337801'; // Default WhatsApp phone number
-
-    // Structured vCard string content
-    const vcard = `BEGIN:VCARD
+  // Structured vCard string content
+  const vcard = `BEGIN:VCARD
 VERSION:3.0
 N:Arifwala;Sweetbites;;;
 FN:${name}
@@ -521,14 +536,12 @@ URL:${url}
 NOTE:${note}
 END:VCARD`;
 
-    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8;' });
-    const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = `${name.replace(/\s+/g, '_')}.vcf`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  });
+  const downloadLink = document.createElement('a');
+  downloadLink.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+  downloadLink.download = `${name.replace(/\s+/g, '_')}.vcf`;
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
 }
 
 // Canvas Confetti Celebration Shower
