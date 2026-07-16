@@ -18,8 +18,8 @@
     {
       "id": "3",
       "platform": "facebook",
-      "title": "Facebook Page",
-      "url": "https://facebook.com",
+      "title": "Facebook Page sweetbites",
+      "url": "https://www.facebook.com/share/18uBoeR6QQ/",
       "clicks": 1,
       "active": true
     },
@@ -51,14 +51,6 @@
       "id": "1783332791640",
       "platform": "website",
       "title": "Website",
-      "url": "https://",
-      "clicks": 0,
-      "active": true
-    },
-    {
-      "id": "1783332821741",
-      "platform": "linkedin",
-      "title": "Linkedin",
       "url": "https://",
       "clicks": 0,
       "active": true
