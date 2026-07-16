@@ -9,25 +9,25 @@
   "links": [
     {
       "id": "1",
-      "platform": "instagram",
-      "title": "Instagram",
-      "url": "https://www.instagram.com/sweetbitesarifwala?igsh=MTB1Nnd1OHJrcnBjcA==",
+      "platform": "whatsapp",
+      "title": "Chat on WhatsApp",
+      "url": "https://wa.me/923217337801",
       "clicks": 0,
       "active": true
     },
     {
       "id": "3",
-      "platform": "facebook",
-      "title": "Facebook Page sweet bites Arifwala",
-      "url": "https://www.facebook.com/share/18uBoeR6QQ/",
+      "platform": "instagram",
+      "title": "instagram",
+      "url": "https://www.instagram.com/sweetbitesarifwala?igsh=MTB1Nnd1OHJrcnBjcA==",
       "clicks": 1,
       "active": true
     },
     {
       "id": "4",
-      "platform": "whatsapp",
-      "title": "Chat on WhatsApp",
-      "url": "https://wa.me/923217337801",
+      "platform": "website",
+      "title": "Wabsite",
+      "url": "https://www.sweetbites.pk",
       "clicks": 3,
       "active": true
     },
