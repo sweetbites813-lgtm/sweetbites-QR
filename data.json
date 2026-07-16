@@ -62,6 +62,14 @@
       "url": "https://www.tiktok.com/@sweetbitesarifwala?_r=1&_t=ZS-984c8QtwRU2",
       "clicks": 0,
       "active": true
+    },
+    {
+      "id": "1784186413402",
+      "platform": "youtube",
+      "title": "YouTube",
+      "url": "https://www.youtube.com/@sweetbitesarifwala-p8q",
+      "clicks": 0,
+      "active": true
     }
   ],
   "repo_casing": "sweetbites-QR"
